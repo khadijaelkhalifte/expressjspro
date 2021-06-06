@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Gestion</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+  <style>
+    #map{
+      height:400px;
+      width:100%;
+    }
+  </style>
+</head>
+<body >
+  <h1>Gestion map</h1>
+  <form action="/save" method="post">
+    <div class="form-group">
+      <label for="latitude">latitude:</label>
+      <input type="text" class="form-control" id="email1" placeholder="Enter latitude" name="latitude" required>
+    </div>
+    <div class="form-group">
+      <label for="longitude">longitude:</label>
+      <input type="text" class="form-control" id="email2" placeholder="Enter longitude" name="longitude" required>
+    </div>
+	<button type="button" id="anass" >show position</button>
+  <p>Click the button to get your coordinates.</p>
+    <button onclick="getLocation()">Try It</button>
+    <p id="demo"></p>
+  </form>      
+  
+  <div id='map'></div>       
+  <script> 
+  var x = document.getElementById("demo");
+  function getLocation() {
+      if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(showPosition);
+      } else {
+          x.innerHTML = "Geolocation is not supported by this browser.";
+      }
+  }
+  function showPosition(position) {
+      x.innerHTML = "Latitude: " + position.coords.latitude +
+              "<br>Longitude: " + position.coords.longitude;
+  }
+
+  var map = L.map('map').setView([31.4831175, -7.09262], 4);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  }).addTo(map); 
+
+  '<% etudiant.forEach(function(e){ %>'
+  L.marker(['<%= e.latitude %>', '<%= e.longitude %>']).addTo(map)
+    .bindPopup("<img src='C:/xampp/htdocs/expressjs/views/monuments/images/beachflag.png'>")
+    .openPopup();
+    '<% }); %>'
+  
+    
+  </script>
+  <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAXiKlz-u4w3wOeTD8XyOcLfYzZ4FMzXR4&callback=initMap">
+    </script>
+	
+</body>
+</html>

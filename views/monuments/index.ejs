@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title><%= title %></title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+   
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+</head>
+<body>
+  <style>
+    #map{
+      height:400px;
+      width:100%;
+    }
+  </style>
+
+<div class="container">
+  <h2><%= title %></h2>
+  <a href="/monuments/add" class="btn btn-sm btn-primary">Add Monument</a><br/><br/>
+  <a href="../.." class="btn btn-sm btn-primary">Show Etudiants</a><br/><br/>
+
+  <table class="table table-dark table-striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>NOM</th>
+		<th>latitude</th>
+		<th>longitude</th>
+		<th>ville</th>
+    <th>Photo</th>
+
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+        <% etudiant.forEach(function(e){ %>
+            <tr>
+                <td><%= e.id %></td>
+                <td><%= e.nom %></td>
+                <td><%= e.latitude %></td>
+				<td><%= e.longitude %></td>
+				<td><%= e.ville %></td>
+        <td><img src='<%= e.img %>'></td>
+                <td>
+                    <a href="monuments/edit/<%= e.id %>" class="btn btn-sm btn-primary">Edit</a>
+                    <a href="monuments/delete/<%= e.id %>" class="btn btn-sm btn-danger">Delete</a>
+                    <button type="button" class="btn btn-sm btn-success mappage" onclick="getLocation('<%= e.latitude %>','<%= e.longitude %>')" >Check Visit</button>
+
+                </td>
+            </tr>
+        <% }); %>
+    </tbody>
+  </table>
+</div>
+
+
+  </form>      
+  
+  <div id='map'></div>       
+  <script> 
+  
+
+  var map = L.map('map').setView([30.372875 , -18.259808], 4);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  }).addTo(map); 
+
+  '<% etudiant.forEach(function(e){ %>'
+  L.marker(['<%= e.latitude %>', '<%= e.longitude %>']).addTo(map)
+    .bindPopup("<img src='<%= e.img %>'>");
+    
+    
+  
+  
+    '<% }); %>'
+    function getLocation(a,b) {
+    function showPosition(position) {
+     var x=parseFloat(position.coords.latitude-0.001);
+      var y=parseFloat(position.coords.latitude+0.001);
+      var u=parseFloat(position.coords.longitude-0.001);
+      var v =parseFloat(position.coords.longitude+0.001);
+      if (x<=parseFloat(a) && parseFloat(a)<=y && u<=parseFloat(b)&&parseFloat(b)<=v){
+              alert("you are visiting the monument");
+  }
+  
+  else{
+    
+    alert("please visit our monument");
+  }
+}
+      if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(showPosition);
+      } else {
+          alert("Geolocation is not supported by this browser.");
+      }
+  }
+  
+    
+  </script>
+  <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAXiKlz-u4w3wOeTD8XyOcLfYzZ4FMzXR4&callback=initMap">
+    </script>
+
+
+</body>
+</html>
